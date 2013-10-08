@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\Common\Inflector;
+namespace Reekoheek\Util;
 
 /**
  * Doctrine inflector has static methods for inflecting text
