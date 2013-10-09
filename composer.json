@@ -1,5 +1,8 @@
 {
     "name": "reekoheek/php-util",
+    "type": "library",
+    "description": "PHP util library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Jafar Shadiq",
@@ -11,7 +14,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Reekoheek/Util": "src/"
+            "Reekoheek\\Util": "src/"
         }
     }
 }
