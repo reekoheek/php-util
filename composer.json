@@ -5,10 +5,15 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Jafar Shadiq",
-            "email": "reekoheek@gmail.com"
+            "name": "Ganesha",
+            "email": "reekoheek@gmail.com",
+            "homepage": "http://xinix.co.id",
+            "role": "Developer"
         }
     ],
+    "support": {
+        "issues": "https://github.com/reekoheek/php-util/issues"
+    },
     "require": {
 
     },
