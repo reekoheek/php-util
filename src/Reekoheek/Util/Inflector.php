@@ -193,12 +193,24 @@ class Inflector
     /**
      * Convert word in to the format for a Doctrine table name. Converts 'ModelName' to 'model_name'
      *
-     * @param  string $word  Word to tableize
-     * @return string $word  Tableized word
+     * @param  string $word       Word to tableize
+     * @param  string $separator  Separator, default: "_"
+     * @return string $word       Tableized word
      */
-    public static function tableize($word)
+    public static function tableize($word, $separator = '_')
     {
-        return strtolower(preg_replace('~(?<=\\w)([A-Z])~', '_$1', $word));
+        return strtolower(preg_replace('~(?<=\\w)([A-Z])~', $separator.'$1', $word));
+    }
+
+    /**
+     * Convert word in to the human format.
+     * @param  [type] $name [description]
+     * @return [type]       [description]
+     */
+    public static function humanize($name) {
+        $word = static::tableize($name, ' ');
+        $word = strtoupper($word[0]).substr($word, 1);
+        return $word;
     }
 
     /**
