@@ -17,7 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Reekoheek\Util;
+namespace ROH\Util;
 
 /**
  * Doctrine inflector has static methods for inflecting text
@@ -208,7 +208,10 @@ class Inflector
      * @return [type]       [description]
      */
     public static function humanize($name) {
-        $word = static::tableize($name, ' ');
+        if (empty($name)) {
+            return $name;
+        }
+        $word = static::tableize(static::classify($name), ' ');
         $word = strtoupper($word[0]).substr($word, 1);
         return $word;
     }
