@@ -1,38 +1,6 @@
 <?php
-/*
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
- * <http://www.doctrine-project.org>.
- */
-
 namespace ROH\Util;
 
-/**
- * Doctrine inflector has static methods for inflecting text
- *
- * The methods in these classes are from several different sources collected
- * across several different php projects and several different authors. The
- * original author names and emails are not known.
- *
- * Plurialize & Singularize implementation are borrowed from CakePHP with some modifications.
- *
- * @link        www.doctrine-project.org
- * @since       1.0
- * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
- * @author      Jonathan H. Wage <jonwage@gmail.com>
- */
 class Inflector
 {
     /**
@@ -191,7 +159,7 @@ class Inflector
     private static $initialState = array();
 
     /**
-     * Convert word in to the format for a Doctrine table name. Converts 'ModelName' to 'model_name'
+     * Convert word in to the format for a table name. Converts 'ModelName' to 'model_name'
      *
      * @param  string $word       Word to tableize
      * @param  string $separator  Separator, default: "_"
@@ -207,7 +175,8 @@ class Inflector
      * @param  [type] $name [description]
      * @return [type]       [description]
      */
-    public static function humanize($name) {
+    public static function humanize($name)
+    {
         if (empty($name)) {
             return $name;
         }
@@ -217,7 +186,7 @@ class Inflector
     }
 
     /**
-     * Convert a word in to the format for a Doctrine class name. Converts 'table_name' to 'TableName'
+     * Convert a word in to the format for a class name. Converts 'table_name' to 'TableName'
      *
      * @param string  $word  Word to classify
      * @return string $word  Classified word
