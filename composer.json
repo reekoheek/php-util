@@ -18,8 +18,8 @@
 
     },
     "autoload": {
-        "psr-0": {
-            "ROH\\Util": "src/"
+        "psr-4": {
+            "ROH\\Util\\": "src/ROH/Util"
         }
     }
 }

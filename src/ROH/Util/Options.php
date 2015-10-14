@@ -2,24 +2,33 @@
 
 namespace ROH\Util;
 
-use F\App;
-
 class Options extends Collection
 {
+    protected static $globalEnv = 'unknown';
+
     protected $env;
 
     public static function create($attributes, $env = null)
     {
+
         return new static($attributes, $env);
+    }
+
+    public static function fromFile($path, $env = null)
+    {
+        return (new static([], $env))->mergeFile($path);
     }
 
     public function __construct($attributes = [], $env = null)
     {
         if (is_null($env)) {
-            $env = App::getInstance()->getOption('env');
+            $env = static::$globalEnv;
+        } else {
+            static::$globalEnv = $env;
         }
 
         $this->env = $env;
+
         parent::__construct($attributes);
     }
 
@@ -35,11 +44,11 @@ class Options extends Collection
 
         $envPath = $pathInfo['dirname'].'/'.$pathInfo['filename'].'-'.$this->env.'.'.$pathInfo['extension'];
 
-        $attributes = require($path);
+        $attributes = $this->requireFile($path);
         $this->merge($attributes);
 
         if (is_readable($envPath)) {
-            $envAttributes = require($envPath);
+            $envAttributes = $this->requireFile($envPath);
             $this->merge($envAttributes);
         }
 
@@ -49,6 +58,15 @@ class Options extends Collection
     public function toArray()
     {
         return $this->attributes;
+    }
+
+    protected function requireFile($path)
+    {
+        if (!is_readable($path)) {
+            throw new \Exception('Unreadable config file at '.$path);
+        }
+
+        return require($path);
     }
 
     protected function mergeOption(&$to, $from)
