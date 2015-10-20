@@ -8,7 +8,7 @@ class Thing extends Collection
 
     public function __construct($attributes)
     {
-        if (is_callable($attributes)) {
+        if (is_callable($attributes) || is_object($attributes)) {
             $this->handler = $attributes;
         } else {
             parent::__construct($attributes);
