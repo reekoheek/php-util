@@ -2,6 +2,8 @@
 
 namespace ROH\Util;
 
+use Exception;
+
 class Options extends Collection
 {
     protected static $globalEnv = 'unknown';
@@ -44,8 +46,10 @@ class Options extends Collection
 
         $envPath = $pathInfo['dirname'].'/'.$pathInfo['filename'].'-'.$this->env.'.'.$pathInfo['extension'];
 
-        $attributes = $this->requireFile($path);
-        $this->merge($attributes);
+        if (is_readable($path)) {
+            $attributes = $this->requireFile($path);
+            $this->merge($attributes);
+        }
 
         if (is_readable($envPath)) {
             $envAttributes = $this->requireFile($envPath);
@@ -63,7 +67,7 @@ class Options extends Collection
     protected function requireFile($path)
     {
         if (!is_readable($path)) {
-            throw new \Exception('Unreadable config file at '.$path);
+            throw new Exception('Unreadable config file at '.$path);
         }
 
         return require($path);

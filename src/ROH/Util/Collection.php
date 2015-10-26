@@ -5,8 +5,9 @@ namespace ROH\Util;
 use Iterator;
 use Countable;
 use ArrayAccess;
+use JsonKit\JsonSerializer;
 
-class Collection implements ArrayAccess, Iterator, Countable
+class Collection implements ArrayAccess, Iterator, Countable, JsonSerializer
 {
     /**
      * Attributes of document.
@@ -32,11 +33,6 @@ class Collection implements ArrayAccess, Iterator, Countable
             $this->attributes = $attributes;
         }
     }
-
-    // public function set($attributes)
-    // {
-    //     $this->attributes = $attributes;
-    // }
 
     /**
      * Get the value of attributes based on offset.
@@ -147,5 +143,35 @@ class Collection implements ArrayAccess, Iterator, Countable
     public function count()
     {
         return count($this->attributes);
+    }
+
+    public function toArray()
+    {
+        return $this->attributes;
+    }
+
+    public function compare($another)
+    {
+        if ($another instanceof Collection) {
+            $another = $another->toArray();
+        }
+
+        $me = $this->toArray();
+
+        if ($me == $another) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    public function __debugInfo()
+    {
+        return $this->attributes;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }
