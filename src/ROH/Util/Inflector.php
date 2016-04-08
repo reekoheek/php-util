@@ -149,14 +149,14 @@ class Inflector
      *
      * @var array
      */
-    private static $cache = array();
+    private static $cache = [];
 
     /**
      * The initial state of Inflector so reset() works.
      *
      * @var array
      */
-    private static $initialState = array();
+    private static $initialState = [];
 
     /**
      * Convert word in to the format for a table name. Converts 'ModelName' to 'model_name'
@@ -264,9 +264,9 @@ class Inflector
                     unset(self::${$type}['merged'][$rule]);
                 }
                 if ($type === 'plural') {
-                    self::$cache['pluralize'] = self::$cache['tableize'] = array();
+                    self::$cache['pluralize'] = self::$cache['tableize'] = [];
                 } elseif ($type === 'singular') {
-                    self::$cache['singularize'] = array();
+                    self::$cache['singularize'] = [];
                 }
             }
         }

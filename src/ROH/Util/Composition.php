@@ -11,7 +11,8 @@ class Composition
 
     public function compose($callback)
     {
-        $this->attributes[] = new Thing($callback);
+        $this->attributes[] = $callback;
+        // $this->attributes[] = new Thing($callback);
 
         return $this;
     }
@@ -29,7 +30,8 @@ class Composition
             for ($i = $len - 1; $i >= 0; $i--) {
                 $next = $this->stack[0];
 
-                $handler = $this->attributes[$i]->getHandler();
+                $handler = $this->attributes[$i];
+                // $handler = $this->attributes[$i]->getHandler();
 
                 array_unshift($this->stack, function (
                     $context
@@ -45,7 +47,7 @@ class Composition
         return $this;
     }
 
-    public function withCore($core)
+    public function setCore($core)
     {
         $this->core = $core;
         return $this;

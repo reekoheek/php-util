@@ -6,32 +6,21 @@ use Exception;
 
 class Options extends Collection
 {
-    protected static $globalEnv = 'unknown';
+    protected static $env = 'development';
 
-    protected $env;
-
-    public static function create($attributes, $env = null)
+    public static function setEnv($env)
     {
-
-        return new static($attributes, $env);
+        static::$env = $env;
     }
 
-    public static function fromFile($path, $env = null)
+    public static function create($attributes)
     {
-        return (new static([], $env))->mergeFile($path);
+        return new static($attributes);
     }
 
-    public function __construct($attributes = [], $env = null)
+    public static function fromFile($path)
     {
-        if (is_null($env)) {
-            $env = static::$globalEnv;
-        } else {
-            static::$globalEnv = $env;
-        }
-
-        $this->env = $env;
-
-        parent::__construct($attributes);
+        return (new static())->mergeFile($path);
     }
 
     public function merge($attributes)
@@ -44,7 +33,7 @@ class Options extends Collection
     {
         $pathInfo = pathinfo($path);
 
-        $envPath = $pathInfo['dirname'].'/'.$pathInfo['filename'].'-'.$this->env.'.'.$pathInfo['extension'];
+        $envPath = $pathInfo['dirname'].'/'.$pathInfo['filename'].'-'.static::$env.'.'.$pathInfo['extension'];
 
         if (is_readable($path)) {
             $attributes = $this->requireFile($path);
@@ -86,7 +75,7 @@ class Options extends Collection
                 $to[$key] = $from[$i];
             } elseif (is_array($from[$key])) {
                 if (!isset($to[$key]) || !is_array($to[$key])) {
-                    $to[$key] = array();
+                    $to[$key] = [];
                 }
                 $this->mergeOption($to[$key], $from[$key]);
             } else {
