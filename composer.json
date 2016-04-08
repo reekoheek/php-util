@@ -1,13 +1,13 @@
 {
     "name": "reekoheek/util",
     "type": "library",
-    "description": "PHP util library",
+    "description": "php common utility library",
     "license": "MIT",
     "authors": [
         {
             "name": "Ganesha",
             "email": "reekoheek@gmail.com",
-            "homepage": "http://xinix.co.id",
+            "homepage": "http://sagara.id",
             "role": "Developer"
         }
     ],
