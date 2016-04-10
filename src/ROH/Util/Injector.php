@@ -24,14 +24,16 @@ class Injector
                 ->toArray();
 
             return $this->resolve($realContract, $realArgs);
-        }
-
-        if (isset($this->singletons[$contract])) {
-            return $this->singletons[$contract];
-        } elseif (isset($this->delegates[$contract])) {
-            throw new Exception('Unimplemented yet!');
+        } elseif (is_string($contract)) {
+            if (isset($this->singletons[$contract])) {
+                return $this->singletons[$contract];
+            } elseif (isset($this->delegates[$contract])) {
+                throw new Exception('Unimplemented yet!');
+            } else {
+                return $this->resolveClass($contract, $args);
+            }
         } else {
-            return $this->resolveClass($contract, $args);
+            return $contract;
         }
     }
 
