@@ -15,7 +15,7 @@
         "issues": "https://github.com/reekoheek/php-util/issues"
     },
     "require": {
-        "reekoheek/jsonkit": "~0.1.0"
+        "reekoheek/jsonkit": "~1.0.0"
     },
     "autoload": {
         "psr-4": {
