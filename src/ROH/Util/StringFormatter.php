@@ -15,12 +15,12 @@ class StringFormatter
         } else {
             return preg_replace_callback('/{(\w+)}/', function ($matches) use ($data) {
                 return $data[$matches[1]];
-            }, $foreignLabel);
+            }, $this->format);
         }
     }
 
     public function isStatic()
     {
-        return strpos($foreignLabel, '{') === false;
+        return strpos($this->format, '{') === false;
     }
 }

@@ -9,7 +9,7 @@ class Injector
 {
     protected $singletons = [];
 
-    protected $delegates = [];
+    protected $delegators = [];
 
     public function resolve($contract, array $args = [])
     {
@@ -27,8 +27,9 @@ class Injector
         } elseif (is_string($contract)) {
             if (isset($this->singletons[$contract])) {
                 return $this->singletons[$contract];
-            } elseif (isset($this->delegates[$contract])) {
-                throw new Exception('Unimplemented yet!');
+            } elseif (isset($this->delegators[$contract])) {
+                $delegator = $this->delegators[$contract];
+                return $delegator($args);
             } else {
                 return $this->resolveClass($contract, $args);
             }
@@ -41,7 +42,7 @@ class Injector
     {
         $refClass = new ReflectionClass($contract);
         if (!$refClass->isInstantiable()) {
-            throw new Exception($contract. ' is not instantiable');
+            throw new Exception('Injector cannot resolve contract, ' . $contract. ' is not instantiable');
         }
 
         $argAsParams = [];
@@ -52,17 +53,17 @@ class Injector
             foreach ($parameters as $index => $parameter) {
                 $name = $parameter->getName();
                 $class = $parameter->getClass();
+                $isOptional = $parameter->isOptional();
                 if (isset($args[$name])) {
                     $argAsParams[] = $args[$name];
-                } elseif (isset($class)) {
-                    $className = isset($args['@'.$name]) ? $args['@'.$name] : $class->getName();
+                } elseif (isset($args['@'.$name]) && ($className = $args['@'.$name])) {
                     $argAsParams[] = $this->resolve($className);
+                } elseif ($isOptional) {
+                    break;
+                } elseif (isset($class)) {
+                    $argAsParams[] = $this->resolve($class->getName());
                 } else {
-                    if ($parameter->isOptional()) {
-                        break;
-                    } else {
-                        throw new Exception('Unresolved parameter #' . $index . ' ($'.$name.') of ' . $contract);
-                    }
+                    throw new Exception('Unresolved parameter #' . $index . ' ($'.$name.') of ' . $contract);
                 }
             }
         }
@@ -76,11 +77,17 @@ class Injector
         return $this;
     }
 
+    public function delegate($contract, $delegator)
+    {
+        $this->delegators[$contract] = $delegator;
+        return $this;
+    }
+
     public function __debugInfo()
     {
         return [
             'singletons' => array_keys($this->singletons),
-            // 'delegates' => $this->delegates,
+            'delegators' => array_keys($this->delegators),
         ];
     }
 }

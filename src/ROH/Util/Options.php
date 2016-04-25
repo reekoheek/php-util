@@ -13,9 +13,9 @@ class Options extends Collection
         static::$env = $env;
     }
 
-    public static function create($attributes)
+    public static function create($attributes = [])
     {
-        return new static($attributes);
+        return new static($attributes ?: []);
     }
 
     public static function fromFile($path)
