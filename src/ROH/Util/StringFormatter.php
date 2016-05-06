@@ -1,26 +1,32 @@
 <?php
 namespace ROH\Util;
 
+use ArrayAccess;
+use Exception;
+
 class StringFormatter
 {
-    public function __construct($format)
+    public static function format($format, $data = [])
     {
-        $this->format = $format;
-    }
-
-    public function format($data)
-    {
-        if ($this->isStatic()) {
-            return $this->format;
-        } else {
-            return preg_replace_callback('/{(\w+)}/', function ($matches) use ($data) {
+        if (static::isStatic($format)) {
+            return $format;
+        } elseif (is_array($data)) {
+            $replace = array();
+            foreach ($data as $key => $val) {
+                $replace['{' . $key . '}'] = $val;
+            }
+            return strtr($format, $replace);
+        } elseif ($data instanceof ArrayAccess) {
+            return preg_replace_callback('/{([^}]+)}/', function ($matches) use ($data) {
                 return $data[$matches[1]];
-            }, $this->format);
+            }, $format);
+        } else {
+            throw new Exception('Unsuitable data format');
         }
     }
 
-    public function isStatic()
+    public static function isStatic($format)
     {
-        return strpos($this->format, '{') === false;
+        return strpos($format, '{') === false;
     }
 }

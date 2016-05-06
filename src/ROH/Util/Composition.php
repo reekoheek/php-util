@@ -1,6 +1,8 @@
 <?php
 namespace ROH\Util;
 
+use Exception;
+
 class Composition
 {
     protected $attributes = [];
@@ -9,17 +11,17 @@ class Composition
 
     protected $stack;
 
-    public function compose($callback)
+    public function compose(callable $callback)
     {
+
         $this->attributes[] = $callback;
-        // $this->attributes[] = new Thing($callback);
 
         return $this;
     }
 
     public function isCompiled()
     {
-        return isset($this->stack);
+        return null !== $this->stack;
     }
 
     public function compile()
@@ -29,16 +31,8 @@ class Composition
             $len = count($this->attributes);
             for ($i = $len - 1; $i >= 0; $i--) {
                 $next = $this->stack[0];
-
                 $handler = $this->attributes[$i];
-                // $handler = $this->attributes[$i]->getHandler();
-
-                array_unshift($this->stack, function (
-                    $context
-                ) use (
-                    $next,
-                    $handler
-                ) {
+                array_unshift($this->stack, function ($context) use ($next, $handler) {
                     return call_user_func($handler, $context, $next);
                 });
             }
@@ -47,7 +41,7 @@ class Composition
         return $this;
     }
 
-    public function setCore($core)
+    public function setCore(callable $core)
     {
         $this->core = $core;
         return $this;
@@ -55,15 +49,16 @@ class Composition
 
     public function apply($context = null)
     {
+        if (null === $this->core) {
+            throw new Exception('Core is undefined');
+        }
         return $this->compile()->stack[0]($context);
     }
 
     public function __invoke($context)
     {
-        if (isset($this->core)) {
-            $core = $this->core;
-            return $core($context);
-        }
+        $core = $this->core;
+        return $core($context);
     }
 
     public function __debugInfo()

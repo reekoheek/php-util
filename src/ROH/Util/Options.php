@@ -6,22 +6,53 @@ use Exception;
 
 class Options extends Collection
 {
+    /**
+     * [$env description]
+     * @var string
+     */
     protected static $env = 'development';
 
+    /**
+     * [resetEnv description]
+     * @return [type] [description]
+     */
+    public static function resetEnv()
+    {
+        static::$env = 'development';
+    }
+
+    /**
+     * [getEnv description]
+     * @return [type] [description]
+     */
+    public static function getEnv()
+    {
+        return static::$env;
+    }
+
+    /**
+     * [setEnv description]
+     * @param [type] $env [description]
+     */
     public static function setEnv($env)
     {
         static::$env = $env;
     }
 
-    public static function create($attributes = [])
-    {
-        return new static($attributes ?: []);
-    }
+    // public static function create($attributes = [])
+    // {
+    //     return new static($attributes ?: []);
+    // }
 
-    public static function fromFile($path)
-    {
-        return (new static())->mergeFile($path);
-    }
+    /**
+     * [fromFile description]
+     * @param  [type] $path [description]
+     * @return [type]       [description]
+     */
+    // public static function fromFile($path)
+    // {
+    //     return (new static())->mergeFile($path);
+    // }
 
     public function merge($attributes)
     {
@@ -33,17 +64,10 @@ class Options extends Collection
     {
         $pathInfo = pathinfo($path);
 
-        $envPath = $pathInfo['dirname'].'/'.$pathInfo['filename'].'-'.static::$env.'.'.$pathInfo['extension'];
+        $envPath = $pathInfo['dirname'].'/'.$pathInfo['filename'].'-'.static::$env.(isset($pathInfo['extension']) ? '.'.$pathInfo['extension'] : '');
 
-        if (is_readable($path)) {
-            $attributes = $this->requireFile($path);
-            $this->merge($attributes);
-        }
-
-        if (is_readable($envPath)) {
-            $envAttributes = $this->requireFile($envPath);
-            $this->merge($envAttributes);
-        }
+        $this->merge($this->requireFile($path));
+        $this->merge($this->requireFile($envPath));
 
         return $this;
     }
@@ -55,11 +79,7 @@ class Options extends Collection
 
     protected function requireFile($path)
     {
-        if (!is_readable($path)) {
-            throw new Exception('Unreadable config file at '.$path);
-        }
-
-        return require($path);
+        return is_readable($path) ? require($path) : [];
     }
 
     protected function mergeOption(&$to, $from)

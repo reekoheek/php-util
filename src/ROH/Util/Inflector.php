@@ -31,7 +31,7 @@ class Inflector
             '/(ax|cris|test)is$/i' => '\1es',
             '/s$/' => 's',
             '/^$/' => '',
-            '/$/' => 's',
+            // '/$/' => 's',
         ),
         'uninflected' => array(
             '.*[nrlm]ese', '.*deer', '.*fish', '.*measles', '.*ois', '.*pox', '.*sheep', 'people', 'cookie'
@@ -178,7 +178,7 @@ class Inflector
     public static function humanize($name)
     {
         if (empty($name)) {
-            return $name;
+            return '';
         }
         $word = static::tableize(static::classify($name), ' ');
         $word = strtoupper($word[0]).substr($word, 1);
@@ -215,15 +215,16 @@ class Inflector
      */
     public static function reset()
     {
-        if (empty(self::$initialState)) {
-            self::$initialState = get_class_vars('Inflector');
-            return;
-        }
-        foreach (self::$initialState as $key => $val) {
-            if ($key != 'initialState') {
-                self::${$key} = $val;
-            }
-        }
+        self::$cache = [];
+        // if (empty(self::$initialState)) {
+        //     self::$initialState = get_class_vars(static::class);
+        //     return;
+        // }
+        // foreach (self::$initialState as $key => $val) {
+        //     if ($key != 'initialState') {
+        //         self::${$key} = $val;
+        //     }
+        // }
     }
 
     /**
@@ -246,32 +247,32 @@ class Inflector
      *        new rules that are being defined in $rules.
      * @return void
      */
-    public static function rules($type, $rules, $reset = false)
-    {
-        foreach ($rules as $rule => $pattern) {
-            if (is_array($pattern)) {
-                if ($reset) {
-                    self::${$type}[$rule] = $pattern;
-                } else {
-                    if ($rule === 'uninflected') {
-                        self::${$type}[$rule] = array_merge($pattern, self::${$type}[$rule]);
-                    } else {
-                        self::${$type}[$rule] = $pattern + self::${$type}[$rule];
-                    }
-                }
-                unset($rules[$rule], self::${$type}['cache' . ucfirst($rule)]);
-                if (isset(self::${$type}['merged'][$rule])) {
-                    unset(self::${$type}['merged'][$rule]);
-                }
-                if ($type === 'plural') {
-                    self::$cache['pluralize'] = self::$cache['tableize'] = [];
-                } elseif ($type === 'singular') {
-                    self::$cache['singularize'] = [];
-                }
-            }
-        }
-        self::${$type}['rules'] = $rules + self::${$type}['rules'];
-    }
+    // public static function rules($type, $rules, $reset = false)
+    // {
+    //     foreach ($rules as $rule => $pattern) {
+    //         if (is_array($pattern)) {
+    //             if ($reset) {
+    //                 self::${$type}[$rule] = $pattern;
+    //             } else {
+    //                 if ($rule === 'uninflected') {
+    //                     self::${$type}[$rule] = array_merge($pattern, self::${$type}[$rule]);
+    //                 } else {
+    //                     self::${$type}[$rule] = $pattern + self::${$type}[$rule];
+    //                 }
+    //             }
+    //             unset($rules[$rule], self::${$type}['cache' . ucfirst($rule)]);
+    //             if (isset(self::${$type}['merged'][$rule])) {
+    //                 unset(self::${$type}['merged'][$rule]);
+    //             }
+    //             if ($type === 'plural') {
+    //                 self::$cache['pluralize'] = self::$cache['tableize'] = [];
+    //             } elseif ($type === 'singular') {
+    //                 self::$cache['singularize'] = [];
+    //             }
+    //         }
+    //     }
+    //     self::${$type}['rules'] = $rules + self::${$type}['rules'];
+    // }
 
     /**
      * Return $word in plural form.
@@ -314,6 +315,9 @@ class Inflector
                 return self::$cache['pluralize'][$word];
             }
         }
+
+        self::$cache['pluralize'][$word] = $word.'s';
+        return self::$cache['pluralize'][$word];
     }
 
     /**

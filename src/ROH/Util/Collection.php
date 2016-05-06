@@ -43,9 +43,7 @@ class Collection implements ArrayAccess, Iterator, Countable, JsonSerializer
      */
     public function offsetGet($key)
     {
-        if ($this->offsetExists($key)) {
-            return $this->attributes[$key];
-        }
+        return $this->offsetExists($key) ? $this->attributes[$key] : null;
     }
 
     /**
@@ -122,7 +120,7 @@ class Collection implements ArrayAccess, Iterator, Countable, JsonSerializer
      */
     public function valid()
     {
-        return !is_null($this->key());
+        return null !== $this->key();
     }
 
     /**

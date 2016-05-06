@@ -17,6 +17,9 @@
     "require": {
         "reekoheek/jsonkit": "~1.0.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
     "autoload": {
         "psr-4": {
             "ROH\\Util\\": "src/ROH/Util"
