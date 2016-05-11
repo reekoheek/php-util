@@ -15,9 +15,9 @@ class Injector
 
     protected $aliases = [];
 
-    public static function getInstance()
+    public static function getInstance($new = false)
     {
-        if (null === static::$instance) {
+        if (null === static::$instance || $new) {
             static::$instance = new static();
         }
 
@@ -36,7 +36,7 @@ class Injector
             return $contract;
         } elseif (is_string($contract)) {
             return $this->resolveClass($contract, $args);
-        } elseif (is_array($contract) && 2 === count($contract) && isset($contract[1])) {
+        } elseif (is_array($contract) && isset($contract[0])) {
             $realContract = $contract[0];
             $realArgs = (new Options(isset($contract[1]) ? $contract[1] : []))
                 ->merge($args)
