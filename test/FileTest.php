@@ -3,9 +3,9 @@
 namespace ROH\Util\Test;
 
 use ROH\Util\File;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class FileTest extends PHPUnit_Framework_TestCase
+class FileTest extends TestCase
 {
     public function testRm()
     {

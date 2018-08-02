@@ -5,9 +5,9 @@ namespace ROH\Util\Test;
 use ROH\Util\Injector;
 use ROH\Util\InjectorException;
 use ROH\Util\Collection;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class InjectorTest extends PHPUnit_Framework_TestCase
+class InjectorTest extends TestCase
 {
     public function testGetInstance()
     {
@@ -28,7 +28,7 @@ class InjectorTest extends PHPUnit_Framework_TestCase
     public function testDelegate()
     {
         $injector = new Injector();
-        $injector->delegate('foo', function() {
+        $injector->delegate('foo', function () {
             return 'bar';
         });
         $this->assertEquals($injector->resolve('foo'), 'bar');
@@ -46,7 +46,8 @@ class InjectorTest extends PHPUnit_Framework_TestCase
         $injector = new Injector();
         $this->assertEquals($injector->resolve(Collection::class)->toArray(), []);
 
-        $fn = function()  {};
+        $fn = function () {
+        };
         $this->assertEquals($injector->resolve($fn), $fn);
 
         $arr = [Collection::class, ['attributes' => ['foo' => 'bar']]];
@@ -82,7 +83,7 @@ class InjectorTest extends PHPUnit_Framework_TestCase
     {
         $injector = new Injector();
         $baz = new Baz();
-        $injector->delegate(Foo::class, function() use ($baz) {
+        $injector->delegate(Foo::class, function () use ($baz) {
             return $baz;
         });
         $bar = $injector->resolve(Bar::class, ['arr' => []]);
@@ -108,7 +109,7 @@ class InjectorTest extends PHPUnit_Framework_TestCase
         try {
             $injector->resolve(Bar::class, ['foo' => new Baz() ]);
             $this->fail('Must not here');
-        } catch(\ROH\Util\InjectorException $e) {
+        } catch (InjectorException $e) {
             if (strpos($e->getMessage(), 'Unresolved parameter #') !== 0) {
                 throw $e;
             }
@@ -133,7 +134,8 @@ class InjectorTest extends PHPUnit_Framework_TestCase
         try {
             $injector->resolve(Baz3::class);
             $this->fail('Must not here');
-        } catch (InjectorException $e) {}
+        } catch (InjectorException $e) {
+        }
 
         try {
             $injector->resolve(Baz4::class);
@@ -146,6 +148,7 @@ class InjectorTest extends PHPUnit_Framework_TestCase
     }
 }
 
+// @codingStandardsIgnoreStart
 interface Foo {}
 class Bar { public $foo; public function __construct(Foo $foo, array $arr) { $this->foo = $foo; } }
 class Baz implements Foo { public $foo; public function FunctionName(Foo $foo = null) { $this->foo = $foo; }}
@@ -156,3 +159,4 @@ class Baz4 { public $baz5; public function __construct(Baz5 $baz5) { $this->baz5
 class Baz5 { public function __construct() { throw new \Exception('Ouch'); }}
 class Foo1 { public function __construct(Foo2 $foo) { $this->foo = $foo; }}
 class Foo2 { public function __construct(Foo2 $foo = null) { $this->foo = $foo; }}
+// @codingStandardsIgnoreEnd

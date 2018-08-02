@@ -2,3 +2,5 @@
 /vendor
 /node_modules
 /coverage
+cghooks.lock
+.DS_Store

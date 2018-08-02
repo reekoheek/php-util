@@ -4,9 +4,10 @@ namespace ROH\Util\Test;
 
 use ROH\Util\StringFormatter;
 use ROH\Util\Collection;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use Exception;
 
-class StringFormatterTest extends PHPUnit_Framework_TestCase
+class StringFormatterTest extends TestCase
 {
     public function testFormat()
     {
@@ -17,8 +18,7 @@ class StringFormatterTest extends PHPUnit_Framework_TestCase
         try {
             StringFormatter::format('foo {foo}', new \stdClass());
             $this->fail('Must not here');
-        } catch(\Exception $e) {
-
+        } catch (Exception $e) {
         }
     }
 }

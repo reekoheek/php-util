@@ -4,17 +4,17 @@ namespace ROH\Util\Test;
 
 use ROH\Util\Options;
 use ROH\Util\File;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class OptionsTest extends PHPUnit_Framework_TestCase
+class OptionsTest extends TestCase
 {
     public function setUp()
     {
         Options::resetEnv();
         mkdir('tmp', 0755);
-        file_put_contents('foo.php', '<?php return '.var_export([
+        file_put_contents('foo.php', '<?php return ' . var_export([
             'foo' => 'bar'
-        ], true).';');
+        ], true) . ';');
     }
 
     public function tearDown()
@@ -75,7 +75,6 @@ class OptionsTest extends PHPUnit_Framework_TestCase
             'array' => [ 4, 5, 3],
             'single' => ['foo', 'bar']
         ]);
-
     }
 
     public function testMergeFile()

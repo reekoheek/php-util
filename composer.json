@@ -14,15 +14,29 @@
     "support": {
         "issues": "https://github.com/reekoheek/php-util/issues"
     },
+    "scripts": {
+        "lint": "phpcs .",
+        "test": "phpunit test",
+        "coverage": "phpunit --whitelist=./src/ --coverage-html=./coverage test",
+        "post-install-cmd": "cghooks add --ignore-lock",
+        "post-update-cmd": "cghooks update"
+    },
     "require": {
         "reekoheek/jsonkit": "~1.0.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "~7",
+        "squizlabs/php_codesniffer": "^3.3",
+        "brainmaestro/composer-git-hooks": "^2.4"
     },
     "autoload": {
         "psr-4": {
-            "ROH\\Util\\": "src/ROH/Util"
+            "ROH\\Util\\": "src"
+        }
+    },
+    "extra": {
+        "hooks": {
+            "pre-commit": "composer lint && composer test"
         }
     }
 }

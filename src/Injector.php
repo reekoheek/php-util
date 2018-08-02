@@ -7,17 +7,36 @@ use Exception;
 
 class Injector
 {
+    /**
+     * Singleton instance
+     *
+     * @var Injector
+     */
     protected static $instance;
 
+    /**
+     * @var array
+     */
     protected $singletons = [];
 
+    /**
+     * @var array
+     */
     protected $delegators = [];
 
+    /**
+     * @var array
+     */
     protected $aliases = [];
 
-    public static function getInstance($new = false)
+    /**
+     * Get singleton instance
+     *
+     * @return Injector
+     */
+    public static function getInstance()
     {
-        if (null === static::$instance || $new) {
+        if (null === static::$instance) {
             static::$instance = new static();
         }
 
@@ -29,6 +48,13 @@ class Injector
         $this->singleton(static::class, $this);
     }
 
+    /**
+     * Resolve contract
+     *
+     * @param mixed $contract
+     * @param array $args
+     * @return mixed
+     */
     public function resolve($contract, array $args = [])
     {
         // return contract if contract is signature of function
@@ -61,7 +87,7 @@ class Injector
 
         $refClass = new ReflectionClass($contract);
         if (!$refClass->isInstantiable()) {
-            throw new InjectorException('Injector cannot resolve contract, ' . $contract. ' is not instantiable');
+            throw new InjectorException('Injector cannot resolve contract, ' . $contract . ' is not instantiable');
         }
 
         $argAsParams = [];
@@ -71,7 +97,7 @@ class Injector
             $parameters = $constructor->getParameters();
             foreach ($parameters as $index => $parameter) {
                 $name = $parameter->getName();
-                $atName = '@'.$name;
+                $atName = '@' . $name;
                 $class = $parameter->getClass();
                 $isOptional = $parameter->isOptional();
                 $argAsParamSet = false;
@@ -107,7 +133,7 @@ class Injector
                 }
 
                 if (!$argAsParamSet) {
-                    throw $lastError ?: new InjectorException('Unresolved parameter #' . $index . ' ($'.$name.') of ' . $contract);
+                    throw $lastError ?: new InjectorException('Unresolved parameter #' . $index . ' ($' . $name . ') of ' . $contract);
                 } else {
                     $argAsParams[] = $argAsParam;
                 }
@@ -126,19 +152,40 @@ class Injector
         }
     }
 
-    public function singleton($contract, $value)
+    /**
+     * Add singleton
+     *
+     * @param string  $contract
+     * @param mixed $value
+     * @return Injector
+     */
+    public function singleton(string $contract, $value)
     {
         $this->singletons[$contract] = $value;
         return $this;
     }
 
-    public function delegate($contract, $delegator)
+    /**
+     * Delegate to delegator factory function
+     *
+     * @param string $contract
+     * @param callable $delegator
+     * @return Injector
+     */
+    public function delegate(string $contract, $delegator)
     {
         $this->delegators[$contract] = $delegator;
         return $this;
     }
 
-    public function alias($contract, $alias)
+    /**
+     * Alias contract as other object
+     *
+     * @param string $contract
+     * @param mixed $alias
+     * @return Injector
+     */
+    public function alias(string $contract, $alias)
     {
         $this->aliases[$contract] = $alias;
         return $this;

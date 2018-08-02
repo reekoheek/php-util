@@ -143,11 +143,22 @@ class Collection implements ArrayAccess, Iterator, Countable, JsonSerializer
         return count($this->attributes);
     }
 
+    /**
+     * Convert to array
+     *
+     * @return array
+     */
     public function toArray()
     {
         return $this->attributes;
     }
 
+    /**
+     * Compare between collection or array
+     *
+     * @param mixed $another
+     * @return int
+     */
     public function compare($another)
     {
         if ($another instanceof Collection) {
@@ -163,11 +174,21 @@ class Collection implements ArrayAccess, Iterator, Countable, JsonSerializer
         }
     }
 
+    /**
+     * Debug info
+     *
+     * @return array
+     */
     public function __debugInfo()
     {
         return $this->attributes;
     }
 
+    /**
+     * Serialize to json
+     *
+     * @return array
+     */
     public function jsonSerialize()
     {
         return $this->toArray();

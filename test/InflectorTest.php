@@ -3,9 +3,9 @@
 namespace ROH\Util\Test;
 
 use ROH\Util\Inflector;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class InflectorTest extends PHPUnit_Framework_TestCase
+class InflectorTest extends TestCase
 {
     public function setUp()
     {

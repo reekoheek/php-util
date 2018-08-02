@@ -167,7 +167,7 @@ class Inflector
      */
     public static function tableize($word, $separator = '_')
     {
-        return strtolower(preg_replace('~(?<=\\w)([A-Z])~', $separator.'$1', $word));
+        return strtolower(preg_replace('~(?<=\\w)([A-Z])~', $separator . '$1', $word));
     }
 
     /**
@@ -181,7 +181,7 @@ class Inflector
             return '';
         }
         $word = static::tableize(static::classify($name), ' ');
-        $word = strtoupper($word[0]).substr($word, 1);
+        $word = strtoupper($word[0]) . substr($word, 1);
         return $word;
     }
 
@@ -316,7 +316,7 @@ class Inflector
             }
         }
 
-        self::$cache['pluralize'][$word] = $word.'s';
+        self::$cache['pluralize'][$word] = $word . 's';
         return self::$cache['pluralize'][$word];
     }
 

@@ -64,7 +64,8 @@ class Options extends Collection
     {
         $pathInfo = pathinfo($path);
 
-        $envPath = $pathInfo['dirname'].'/'.$pathInfo['filename'].'-'.static::$env.(isset($pathInfo['extension']) ? '.'.$pathInfo['extension'] : '');
+        $envPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '-' . static::$env .
+            (isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '');
 
         $this->merge($this->requireFile($path));
         $this->merge($this->requireFile($envPath));

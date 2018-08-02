@@ -3,9 +3,9 @@
 namespace ROH\Util\Test;
 
 use ROH\Util\Collection;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends PHPUnit_Framework_TestCase
+class CollectionTest extends TestCase
 {
     public function testConstruct()
     {
